@@ -1,11 +1,9 @@
 package terekhov.base;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -15,15 +13,11 @@ import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import terekhov.properties.PropertiesManager;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -34,7 +28,7 @@ import java.util.logging.Level;
  * Является базовым для всех текущих тестов, использующий selenium.
  */
 @Slf4j
-public abstract class AbstractBaseTest  {
+public abstract class AbstractBaseTest {
 
     private static final String DEFAULT_BROWSER = BrowserType.CHROME;
 
@@ -45,28 +39,20 @@ public abstract class AbstractBaseTest  {
     private static final int DEFAULT_IMPLICITLY_TIMEOUT = 20;
     private static final int DEFAULT_SCRIPT_TIMEOUT = 10;
 
-    public static WebDriverWait Wait;
     protected WebDriver driver = null;
 
-    public static void waitUntilPageReady() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Before
     public void init() throws IOException {
 
-        log.info("\n-------------------------------------------------------");
+        //log.info("\n-------------------------------------------------------");
 
         int width = DEFAULT_WIDTH;
         int height = DEFAULT_HEIGHT;
 
         try {
 
-            log.info("Hub is: " + PropertiesManager.getInstance().getProperties("hub"));
+            //log.info("Hub is: " + PropertiesManager.getInstance().getProperties("hub"));
 
             String browserProp;
             /* Поиск значения типа браузера */
@@ -76,7 +62,7 @@ public abstract class AbstractBaseTest  {
                     browserProp = DEFAULT_BROWSER;
                 }
             } catch (Exception e) {
-                log.warn("Browser was not set");
+                //log.warn("Browser was not set");
                 browserProp = DEFAULT_BROWSER;
             }
 
@@ -84,14 +70,14 @@ public abstract class AbstractBaseTest  {
             try {
                 width = Integer.parseInt(PropertiesManager.getInstance().getProperties("window.size.width"));
             } catch (Exception e) {
-                log.warn("Width was not set");
+                //log.warn("Width was not set");
             }
 
             /* Поиск значения высоты окна браузера */
             try {
                 height = Integer.parseInt(PropertiesManager.getInstance().getProperties("window.size.height"));
             } catch (Exception e) {
-                log.warn("Height was not set");
+                //log.warn("Height was not set");
             }
 
             DesiredCapabilities capability = null;
@@ -127,7 +113,7 @@ public abstract class AbstractBaseTest  {
             capability.setCapability(ChromeOptions.CAPABILITY, options);
             capability.setCapability(CapabilityType.LOGGING_PREFS, logs);
 
-            log.info("Подключение к удаленному хабу");
+            //log.info("Подключение к удаленному хабу");
             driver = new RemoteWebDriver(new URL(PropertiesManager.getInstance().getProperties("hub").toString()), capability);
 
             log.info("Настройка размеров окна");
@@ -136,7 +122,7 @@ public abstract class AbstractBaseTest  {
             log.info("Инициализация драйвера завершена");
 
         } catch (Exception e) {
-            log.error("Error: " + e.getMessage());
+            //log.error("Error: " + e.getMessage());
         }
 
         if (driver == null) {

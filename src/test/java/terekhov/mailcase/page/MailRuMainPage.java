@@ -7,8 +7,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import java.util.List;
-
 /**
  * Класс, оборачивающий главную страницу Mail.ru
  * Created by Aris on 02.11.2016.
@@ -23,7 +21,6 @@ public class MailRuMainPage {
     private WebElement loginButton;
 
     private WebDriver driver;
-    private String screensFolder;
 
     /**
      * Надежнее использовать js эмуляцию нажатия на элемент (из-за возможных наложений элементов)
@@ -33,12 +30,11 @@ public class MailRuMainPage {
     /**
      * Метод, реализующий вход в аккаунт пользователя
      *
-     * @param mailruURL       URL главной страницы Mail.ru
-     * @param mailruLogin     логин пользователя
-     * @param mailruPassword  пароль пользователя
+     * @param mailruURL      URL главной страницы Mail.ru
+     * @param mailruLogin    логин пользователя
+     * @param mailruPassword пароль пользователя
      */
-    public boolean logIn (String mailruURL, String mailruLogin, String mailruPassword)
-    {
+    public boolean logIn(String mailruURL, String mailruLogin, String mailruPassword) {
         log.info("Переходим на главную страницу Mail.ru");
         driver.navigate().to(mailruURL);
         log.info("Вводим логин");
@@ -46,18 +42,21 @@ public class MailRuMainPage {
         log.info("Вводим пароль");
         passwordInput.sendKeys(mailruPassword);
         log.info("Кликаем по кнопке Войти");
-        executor.executeScript("arguments[0].click();",loginButton);
-        if (driver.getCurrentUrl().contains("/inbox/")){return true;}else{return false;}
+        executor.executeScript("arguments[0].click();", loginButton);
+        if (driver.getCurrentUrl().contains("/inbox/")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
     /**
      * Инициализатор класса
      *
-     * @param driver   инстанс Selenium WebDriver
-     * @param folder   папка для хранения скриншотов, в случае ошибки
+     * @param driver инстанс Selenium WebDriver
      */
-    public MailRuMainPage(WebDriver driver, String folder) throws Exception {
+    public MailRuMainPage(WebDriver driver) throws Exception {
         executor = (JavascriptExecutor) driver;
         PageFactory.initElements(driver, this);
         this.driver = driver;
